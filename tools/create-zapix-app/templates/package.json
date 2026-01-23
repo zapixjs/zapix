@@ -1,0 +1,12 @@
+{
+  "name": "my-zapix-app",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "zapix": "workspace:*"
+  },
+  "scripts": {
+    "dev": "ts-node src/handler.ts",
+    "build": "tsc"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "create-zapix-app",
+  "version": "0.1.0",
+  "bin": {
+    "create-zapix-app": "./dist/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "prompts": "^3.0.0",
+    "fs-extra": "^11.1.1",
+    "kleur": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.0"
+  }
+}
