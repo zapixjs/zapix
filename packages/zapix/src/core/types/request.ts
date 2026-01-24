@@ -1,50 +1,5 @@
-import type { CoreRequest, CoreResponse } from "./core";
-
-/**
- * Response defines the helper methods available in the `res` object
- * passed to handlers and middleware in Zapix.
- *
- * These methods produce a standardized CoreResponse object that is
- * platform-agnostic, adapter-neutral, and ready to be translated by the
- * adapter (e.g., AWS Lambda, Node, Edge).
- */
-export type Response = {
-  /**
-   * Sends a JSON response.
-   *
-   * @param body - The payload to send as JSON. Can be any serializable value.
-   * @param status - Optional HTTP status code (default: 200)
-   * @param headers - Optional additional headers to include in the response
-   * @returns A CoreResponse object with `application/json` content type
-   */
-  json: (
-    body: unknown,
-    status?: number,
-    headers?: Record<string, string>,
-  ) => CoreResponse;
-
-  /**
-   * Sends a plain text response.
-   *
-   * @param body - The text string to send
-   * @param status - Optional HTTP status code (default: 200)
-   * @param headers - Optional additional headers to include in the response
-   * @returns A CoreResponse object with `text/plain` content type
-   */
-  text: (
-    body: string,
-    status?: number,
-    headers?: Record<string, string>,
-  ) => CoreResponse;
-
-  /**
-   * Sends an empty response.
-   *
-   * @param status - Optional HTTP status code (default: 204 No Content)
-   * @returns A CoreResponse object with `null` body
-   */
-  empty: (status?: number) => CoreResponse;
-};
+import type { CoreRequest, Result } from "./core";
+import { Response } from "./response";
 
 /**
  * `Request` is the typed request object passed to Zapix handlers and middleware.
@@ -80,7 +35,7 @@ export type Request<
 export type Controller<
   TBody extends object = Record<string, unknown>,
   TExtra extends object = Record<string, unknown>,
-> = (req: Request<TBody, TExtra>, res: Response) => Promise<unknown>;
+> = (req: Request<TBody, TExtra>, res: Response) => Promise<Result>;
 
 /**
  * Middleware defines a function that runs before or after route handlers.
@@ -103,5 +58,5 @@ export type Middleware<
 > = (
   req: Request<TBody, TExtra>,
   res: Response,
-  next: () => Promise<CoreResponse | void>,
-) => Promise<CoreResponse | void>;
+  next: () => Promise<Result | void>,
+) => Promise<Result | void>;

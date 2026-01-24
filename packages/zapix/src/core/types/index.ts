@@ -1,3 +1,3 @@
 export * from "./core";
-export * from "./http";
+export * from "./request";
 export * from "./response";

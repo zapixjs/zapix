@@ -55,5 +55,8 @@
   "bugs": {
     "url": "https://github.com/raihansharifrimon/zapix/issues"
   },
-  "homepage": "https://github.com/raihansharifrimon/zapix#readme"
+  "homepage": "https://github.com/raihansharifrimon/zapix#readme",
+  "dependencies": {
+    "uuid": "^13.0.0"
+  }
 }

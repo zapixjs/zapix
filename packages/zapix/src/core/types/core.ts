@@ -1,4 +1,4 @@
-import { Response } from "./http";
+import { Response } from "./response";
 
 export type HttpMethod =
   | "GET"
@@ -34,6 +34,8 @@ export interface CoreRequest<TBody = unknown> {
   /** Route params (filled by router, not adapter) */
   params?: Record<string, string | undefined>;
 
+  requestId?: string;
+
   /** raw metadata (adapter-specific, optional) */
   raw?: {
     name: "aws-lambda" | "edge" | "node" | string;
@@ -42,7 +44,7 @@ export interface CoreRequest<TBody = unknown> {
   };
 }
 
-export interface CoreResponse {
+export interface Result {
   /** HTTP status code */
   status: number;
 
@@ -68,6 +70,8 @@ export interface CoreResponse {
  */
 export type CoreController = (req: CoreRequest, res: Response) => Promise<any>;
 
+export type NextFn = (err?: unknown) => Promise<Result | void>;
+
 /**
  * CoreMiddleware represents a middleware function in Zapix.
  *
@@ -79,5 +83,5 @@ export type CoreController = (req: CoreRequest, res: Response) => Promise<any>;
 export type CoreMiddleware = (
   req: CoreRequest,
   res: Response,
-  next: () => Promise<void>,
-) => Promise<CoreResponse | void>;
+  next: NextFn,
+) => Promise<Result | void>;

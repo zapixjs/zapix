@@ -1,114 +1,86 @@
-/* -------------------------------------------------------------------------- */
-/*                               Default Headers                               */
-/* -------------------------------------------------------------------------- */
-import {
-  ApiHeaders,
-  ApiResponseBody,
-  AwsApiResponse,
-  ErrorResponse,
-} from "./types";
+import { Result } from "./types";
 
-const DEFAULT_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Content-Type": "application/json",
-} as const satisfies ApiHeaders;
+export class ZapixResponseCore {
+  private statusCode = 200;
+  private headers: Record<string, string> = {};
+  private contentType?: string;
 
-/* -------------------------------------------------------------------------- */
-/*                               Type Guards                                   */
-/* -------------------------------------------------------------------------- */
-
-function isValidationConstraintError(
-  error: unknown,
-): error is Array<{ constraints: Record<string, string> }> {
-  return (
-    Array.isArray(error) &&
-    typeof error[0]?.constraints === "object" &&
-    error[0].constraints !== null
-  );
-}
-
-function isNamedValidationError(
-  error: unknown,
-): error is { name: "ValidationError"; errors?: unknown } {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "name" in error &&
-    (error as { name: string }).name === "ValidationError"
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*                            Error Normalization                               */
-/* -------------------------------------------------------------------------- */
-
-function normalizeError(error: unknown): ErrorResponse {
-  if (isValidationConstraintError(error)) {
-    const constraints = error[0]?.constraints || {};
-    const firstMessage = Object.values(constraints)[0];
-
+  protected finalize(body: unknown): Result {
     return {
-      success: false,
-      message: firstMessage ?? "Validation error",
-      details: constraints,
+      status: this.statusCode,
+      body,
+      headers: {
+        ...(this.contentType ? { "Content-Type": this.contentType } : {}),
+        ...this.headers,
+      },
     };
   }
 
-  if (isNamedValidationError(error)) {
-    return {
-      success: false,
-      message: "Validation error",
-      details: error.errors,
-    };
+  status(code: number): this {
+    this.statusCode = code;
+    return this;
   }
 
-  if (error instanceof Error) {
-    return {
-      success: false,
-      message: error.message || "Internal Server Error",
-      details: error.stack,
-    };
+  set(key: string, value: string): this;
+  set(headers: Record<string, string>): this;
+  set(keyOrHeaders: string | Record<string, string>, value?: string): this {
+    if (typeof keyOrHeaders === "string") {
+      this.headers[keyOrHeaders] = value!;
+    } else {
+      Object.assign(this.headers, keyOrHeaders);
+    }
+    return this;
   }
 
-  if (typeof error === "string") {
-    return {
-      success: false,
-      message: error,
-    };
+  type(value: string): this {
+    this.contentType = value.includes("/") ? value : `text/${value}`;
+    return this;
   }
 
-  return {
-    success: false,
-    message: "Internal Server Error",
-    details: error,
-  };
-}
+  json(body: unknown): Result {
+    this.contentType = "application/json";
+    return this.finalize(body);
+  }
 
-/* -------------------------------------------------------------------------- */
-/*                           Response Builder                                  */
-/* -------------------------------------------------------------------------- */
+  text(body: string): Result {
+    this.contentType = "text/plain";
+    return this.finalize(body);
+  }
 
-export function buildApiResponse<T>(
-  statusCode: number,
-  payload: T | unknown,
-  headers?: ApiHeaders,
-): AwsApiResponse {
-  const isSuccess = statusCode >= 200 && statusCode < 300;
+  send(body?: unknown): Result {
+    if (body == null) {
+      this.statusCode ||= 204;
+      return this.finalize(null);
+    }
 
-  const body: ApiResponseBody<T> = isSuccess
-    ? {
-        success: true,
-        message: "Success",
-        data: payload as T,
-      }
-    : normalizeError(payload);
+    if (typeof body === "string") {
+      this.contentType ??= "text/plain";
+      return this.finalize(body);
+    }
 
-  return {
-    statusCode,
-    headers: {
-      ...DEFAULT_HEADERS,
-      ...headers,
-    },
-    body: JSON.stringify(body),
-  };
+    this.contentType ??= "application/json";
+    return this.finalize(body);
+  }
+
+  empty(): Result {
+    this.statusCode = 204;
+    return this.finalize(null);
+  }
+
+  redirect(url: string, status = 302): Result {
+    this.statusCode = status;
+    this.headers.location = url;
+    return this.finalize(null);
+  }
+
+  throw(message: string, code?: string, details?: unknown): Result {
+    this.contentType = "application/json";
+
+    return this.finalize({
+      success: false,
+      message,
+      code,
+      details,
+    });
+  }
 }

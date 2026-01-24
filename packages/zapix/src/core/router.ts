@@ -1,24 +1,23 @@
-import {
-  CoreController,
-  CoreMiddleware,
-  CoreRequest,
-  CoreResponse,
-  Response,
-} from "./types";
+import { Controller, Middleware, Request, Response, Result } from "./types";
 
-type RouteChainItem = CoreController | CoreMiddleware;
-
+type RouteChainItem = Controller | Middleware;
 interface Route {
   method: string;
   path: string;
   handlers: RouteChainItem[];
 }
 
+type ErrorHandler = (
+  err: unknown,
+  req: Request,
+  res: Response,
+) => Promise<Result> | Result;
+
 export class Router {
   private routes: Route[] = [];
   private globalMiddlewares: RouteChainItem[] = [];
   private fallbackHandlers: RouteChainItem[] = [];
-  private errorHandler?: (err: any) => Promise<CoreResponse>;
+  private errorHandler?: ErrorHandler;
 
   get(path: string, ...handlers: RouteChainItem[]) {
     this.add("GET", path, handlers);
@@ -48,15 +47,32 @@ export class Router {
     this.globalMiddlewares.push(...middlewares);
   }
 
-  useError(handler: (err: any) => Promise<CoreResponse>) {
+  onError(handler: ErrorHandler) {
     this.errorHandler = handler;
+  }
+
+  private async handleError(
+    err: unknown,
+    req: Request,
+    res: Response,
+  ): Promise<Result> {
+    if (this.errorHandler) {
+      return await this.errorHandler(err, req, res);
+    }
+
+    // default behavior (same spirit as Express)
+    if (err instanceof Error) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 
   private add(method: string, path: string, handlers: RouteChainItem[]) {
     this.routes.push({ method, path, handlers });
   }
 
-  async handle(req: CoreRequest, res: Response): Promise<CoreResponse> {
+  async handle(req: Request, res: Response): Promise<Result> {
     const route = this.routes.find(
       (r) => r.method === req.method && r.path === req.path,
     );
@@ -67,24 +83,32 @@ export class Router {
     ];
 
     if (!handlers.length) {
-      return res.json({ message: "Route not found RES" }, 404);
+      return res.status(404).json({ message: "Route not found" });
     }
 
     let index = 0;
 
-    const run = async (err?: any) => {
+    const run = async (err?: unknown): Promise<Result | void> => {
       if (err) {
-        if (this.errorHandler) return this.errorHandler(err);
-        return { status: 500, body: err };
+        return this.handleError(err, req, res);
       }
 
       const handler = handlers[index++];
       if (!handler) return;
 
-      const next = (error?: any) => run(error);
-      return handler(req, res, next);
+      try {
+        return await handler(
+          req,
+          res,
+          (nextErr?: unknown): Promise<void | Result> => run(nextErr),
+        );
+      } catch (error) {
+        return this.handleError(error, req, res);
+      }
     };
 
-    return (await run()) ?? res.json({ message: "No response returned" }, 500);
+    return (
+      (await run()) ?? res.status(500).json({ message: "No response returned" })
+    );
   }
 }
