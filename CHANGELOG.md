@@ -9,6 +9,10 @@ and [Semantic Versioning](https://semver.org/).
 - Planned features and improvements
 
 
+## [0.2.0] - 2026-01-29
+### Added
+- Added rawBody in the request event
+
 ## [0.1.9] - 2025-12-18
 ### Added
 - Global middleware support

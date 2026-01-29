@@ -5,6 +5,7 @@ export type Request<
 	TExtra extends object = Record<string, unknown>,
 > = Omit<APIGatewayProxyEventV2, 'body'> & {
 	body?: TBody; // <-- optional now
+	rawBody?: string;
 } & TExtra;
 
 export interface Context extends LambdaContext {}

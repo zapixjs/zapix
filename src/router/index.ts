@@ -71,7 +71,7 @@ export class Router {
 	}
 
 	async handle(
-		event: APIGatewayProxyEventV2,
+		event: APIGatewayProxyEventV2 & { rawBody?: string },
 		context: Context,
 	): Promise<APIGatewayProxyResultV2> {
 		const routeKey = event.requestContext.routeKey;
@@ -87,6 +87,7 @@ export class Router {
 		}
 
 		event.body = safeJsonParse(body as string);
+		event.rawBody = body;
 
 		const handlers: RouteChainItem[] = [
 			...this.globalMiddlewares,
