@@ -1,6 +1,4 @@
-# ===============================
-# Node / NPM
-# ===============================
+
 node_modules/
 npm-debug.log*
 yarn-error.log*
@@ -71,5 +69,3 @@ coverage/
 packages/zapix/dist/
 packages/zapix/lib/
 packages/zapix/.turbo/
-
-__test__
