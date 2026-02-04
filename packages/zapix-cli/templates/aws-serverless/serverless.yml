@@ -1,0 +1,43 @@
+service: zapix-app
+
+build:
+  esbuild:
+    bundle: true
+    minify: true
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  memorySize: 256
+  timeout: 30
+  environment:
+    NODE_ENV: ${self:provider.stage}
+
+functions:
+  todo:
+    handler: ./src/handlers.todoHandler
+    events:
+      - httpApi:
+          path: /todos
+          method: POST
+      - httpApi:
+          path: /todos
+          method: GET
+      - httpApi:
+          path: /todos/{id}
+          method: GET
+      - httpApi:
+          path: /todos/{id}
+          method: PUT
+      - httpApi:
+          path: /todos/{id}
+          method: DELETE
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 5000

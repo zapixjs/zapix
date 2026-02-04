@@ -1,7 +1,7 @@
-import { ZapixResponseCore } from "@/core/response";
-import { Router } from "@/core/router";
-import { Request } from "@/core/types";
-import { tryParseJson } from "@/helpers";
+import { ZapixResponseCore } from "../../core/response";
+import { Router } from "../../core/router";
+import { Request } from "../../core/types";
+import { tryParseJson } from "../../helpers";
 import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyResultV2,

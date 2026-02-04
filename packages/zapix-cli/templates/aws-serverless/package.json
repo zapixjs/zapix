@@ -1,3 +1,22 @@
 {
-    "name": "zapix-app"
+  "name": "zapix-app",
+  "version": "1.0.0",
+  "description": "A Zapix serverless application for AWS Lambda",
+  "main": "dist/handlers.js",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "serverless deploy",
+    "dev": "serverless offline",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --write"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/aws-lambda": "^8.10.160",
+    "@types/node": "^22.10.0",
+    "serverless": "^4.0.0",
+    "serverless-offline": "^14.0.0",
+    "typescript": "^5.7.0"
+  }
 }
