@@ -1,41 +1,29 @@
 {
-  "compilerOptions": {
-    /* Output */
-    "outDir": "dist",
-    "rootDir": "src",
-
-    /* Runtime target */
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "types": ["node"],
-
-    /* Module system (FIXED) */
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-
-    /* ESM / Node features */
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-
-    /* Debugging */
-    "sourceMap": true,
-
-    /* Strictness (CLI-friendly) */
-    "strict": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-
-    /* Emit */
-    "removeComments": true
-  },
-
-  "include": ["src/**/*.ts"],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    "templates"
-  ]
+	"compilerOptions": {
+		"lib": ["ES2024", "DOM"],
+		"target": "ES2024",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"outDir": "dist",
+		"rootDir": "src",
+		"declarationDir": "./dist/types",
+		"strict": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true,
+		"checkJs": true,
+		"allowJs": true,
+		"declaration": true,
+		"declarationMap": true,
+		"allowSyntheticDefaultImports": true
+	},
+	"files": ["./src/index.ts"],
+	"include": ["src/**/*.ts"],
+	"exclude": [
+		"dist",
+		"node_modules",
+		"**/*.spec.ts",
+		"**/*.test.ts",
+		"templates"
+	]
 }

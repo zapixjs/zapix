@@ -39,6 +39,6 @@ When using Zapix in your applications:
 
 ## Scope
 
-This policy applies to the `zapix` npm package and its source code in the official repository.
+This policy applies to all packages in the Zapix repository and their source code.
 
 Third-party plugins, adapters, or applications built with Zapix are outside the scope of this policy.
