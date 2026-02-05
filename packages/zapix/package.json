@@ -1,62 +1,88 @@
 {
-  "name": "zapix",
-  "version": "1.0.0-beta.1",
-  "description": "Zapix: Lightweight, Express-style router for AWS Lambda and API Gateway v2. Build serverless APIs with middleware, type safety, and minimal setup.",
-  "main": "dist/dist/index.js",
-  "types": "dist/dist/types/index.d.ts",
-  "files": [
-    "dist/**/*"
-  ],
-  "sideEffects": false,
-  "scripts": {
-    "build": "tsc",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "lint": "biome check .",
-    "lint:fix": "biome check . --write",
-    "prepublishOnly": "npm run build"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
-    },
-    "./aws": {
-      "types": "./dist/adapters/aws/index.d.ts",
-      "default": "./dist/adapters/aws/index.js"
-    }
-  },
-  "keywords": [
-    "lambda",
-    "router",
-    "serverless",
-    "api-gateway",
-    "zapix"
-  ],
-  "author": "Raihan Sharif <raihansharif.dev@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "@aws-sdk/client-lambda": "^3.972.0",
-    "@repo/biome-config": "workspace:^",
-    "@repo/typescript-config": "workspace:*",
-    "@types/aws-lambda": "^8.10.160",
-    "@types/node": "^24.10.9",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.9.3",
-    "unbuild": "^3.6.1",
-    "vite": "^7.3.1",
-    "vite-tsconfig-paths": "^6.0.4",
-    "vitest": "^3.2.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/raihansharifrimon/zapix.git"
-  },
-  "bugs": {
-    "url": "https://github.com/raihansharifrimon/zapix/issues"
-  },
-  "homepage": "https://github.com/raihansharifrimon/zapix#readme",
-  "dependencies": {
-    "uuid": "^13.0.0"
-  }
+	"name": "zapix",
+	"version": "1.0.0-beta.1",
+	"description": "Lightweight, Express-style router for AWS Lambda and API Gateway v2. Build serverless APIs with middleware, type safety, and minimal setup.",
+	"type": "module",
+	"scripts": {
+		"build": "tsc",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"lint": "biome check .",
+		"lint:fix": "biome check . --write",
+		"prepublishOnly": "npm run build"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/types/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/types/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./aws": {
+			"types": "./dist/types/adapters/aws/index.d.ts",
+			"import": "./dist/adapters/aws/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md"
+	],
+	"sideEffects": false,
+	"keywords": [
+		"aws",
+		"aws-lambda",
+		"lambda",
+		"serverless",
+		"router",
+		"routing",
+		"api-gateway",
+		"api-gateway-v2",
+		"http-api",
+		"express",
+		"middleware",
+		"typescript",
+		"type-safe",
+		"rest-api",
+		"api",
+		"microservice",
+		"cloud",
+		"faas",
+		"handler",
+		"lightweight",
+		"zapix"
+	],
+	"author": "Raihan Sharif <raihansharif.dev@gmail.com>",
+	"license": "MIT",
+	"engines": {
+		"node": ">=20.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/raihansharifrimon/zapix.git",
+		"directory": "packages/zapix"
+	},
+	"bugs": {
+		"url": "https://github.com/raihansharifrimon/zapix/issues"
+	},
+	"homepage": "https://github.com/raihansharifrimon/zapix#readme",
+	"dependencies": {
+		"uuid": "^13.0.0"
+	},
+	"devDependencies": {
+		"@aws-sdk/client-lambda": "^3.972.0",
+		"@repo/biome-config": "workspace:^",
+		"@repo/typescript-config": "workspace:*",
+		"@types/aws-lambda": "^8.10.160",
+		"@types/node": "^24.10.9",
+		"tsconfig-paths": "^4.2.0",
+		"typescript": "^5.9.3",
+		"unbuild": "^3.6.1",
+		"vite": "^7.3.1",
+		"vite-tsconfig-paths": "^6.0.4",
+		"vitest": "^3.2.4"
+	}
 }

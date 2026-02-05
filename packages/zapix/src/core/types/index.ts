@@ -1,3 +1,3 @@
-export * from "./core";
-export * from "./request";
-export * from "./response";
+export * from "./core.js";
+export * from "./request.js";
+export * from "./response.js";

@@ -73,3 +73,6 @@ packages/zapix/lib/
 packages/zapix/.turbo/
 
 __test__
+
+# Output of 'npm pack'
+*.tgz

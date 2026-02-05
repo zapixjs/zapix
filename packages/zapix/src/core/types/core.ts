@@ -1,64 +1,64 @@
-import { Response } from "./response";
+import { Response } from "./response.js";
 
 export type HttpMethod =
-  | "GET"
-  | "POST"
-  | "PUT"
-  | "PATCH"
-  | "DELETE"
-  | "OPTIONS"
-  | "HEAD";
+	| "GET"
+	| "POST"
+	| "PUT"
+	| "PATCH"
+	| "DELETE"
+	| "OPTIONS"
+	| "HEAD";
 
 export interface CoreRequest<TBody = unknown> {
-  /** HTTP method (GET, POST, etc.) */
-  method: HttpMethod | string;
+	/** HTTP method (GET, POST, etc.) */
+	method: HttpMethod | string;
 
-  /** Normalized URL path (no domain, no query string) */
-  path: string;
+	/** Normalized URL path (no domain, no query string) */
+	path: string;
 
-  /** String URL path including (domain, query string) */
-  pathString: string;
+	/** String URL path including (domain, query string) */
+	pathString: string;
 
-  /** Raw query parameters */
-  query?: Record<string, string | string[] | undefined>;
+	/** Raw query parameters */
+	query?: Record<string, string | string[] | undefined>;
 
-  /** Normalized headers (lowercased keys) */
-  headers: Record<string, string | undefined>;
+	/** Normalized headers (lowercased keys) */
+	headers: Record<string, string | undefined>;
 
-  /** Parsed request body */
-  body: TBody;
+	/** Parsed request body */
+	body: TBody;
 
-  /** Raw body string (before parsing) */
-  rawBody?: string;
+	/** Raw body string (before parsing) */
+	rawBody?: string;
 
-  /** Route params (filled by router, not adapter) */
-  params?: Record<string, string | undefined>;
+	/** Route params (filled by router, not adapter) */
+	params?: Record<string, string | undefined>;
 
-  requestId?: string;
+	requestId?: string;
 
-  /** raw metadata (adapter-specific, optional) */
-  raw?: {
-    name: "aws-lambda" | "edge" | "node" | string;
-    event?: unknown;
-    context?: unknown;
-  };
+	/** raw metadata (adapter-specific, optional) */
+	raw?: {
+		name: "aws-lambda" | "edge" | "node" | string;
+		event?: unknown;
+		context?: unknown;
+	};
 }
 
 export interface Result {
-  /** HTTP status code */
-  status: number;
+	/** HTTP status code */
+	status: number;
 
-  /** Response body (will be serialized by adapter) */
-  body?: unknown;
+	/** Response body (will be serialized by adapter) */
+	body?: unknown;
 
-  /** Response headers */
-  headers?: Record<string, string>;
+	/** Response headers */
+	headers?: Record<string, string>;
 
-  /** Cookies (adapter decides how to serialize) */
-  cookies?: string[];
+	/** Cookies (adapter decides how to serialize) */
+	cookies?: string[];
 
-  /** Whether body is already serialized */
-  isBase64Encoded?: boolean;
+	/** Whether body is already serialized */
+	isBase64Encoded?: boolean;
 }
 
 /**
@@ -81,7 +81,7 @@ export type NextFn = (err?: unknown) => Promise<Result | void>;
  * @returns Promise resolving to CoreResponse if short-circuited, or void to continue
  */
 export type CoreMiddleware = (
-  req: CoreRequest,
-  res: Response,
-  next: NextFn,
+	req: CoreRequest,
+	res: Response,
+	next: NextFn,
 ) => Promise<Result | void>;

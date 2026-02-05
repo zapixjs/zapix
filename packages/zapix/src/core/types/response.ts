@@ -1,2 +1,2 @@
-import { ZapixResponseCore } from "../response";
+import { ZapixResponseCore } from "../response.js";
 export type Response = ZapixResponseCore;

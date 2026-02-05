@@ -1,2 +1,2 @@
-export type * from "../core/types/request";
-export type * from "../core/types/response";
+export type * from "../core/types/request.js";
+export type * from "../core/types/response.js";

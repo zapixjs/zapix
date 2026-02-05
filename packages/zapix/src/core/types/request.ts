@@ -1,5 +1,5 @@
-import type { CoreRequest, Result } from "./core";
-import { Response } from "./response";
+import type { CoreRequest, Result } from "./core.js";
+import { Response } from "./response.js";
 
 /**
  * `Request` is the typed request object passed to Zapix handlers and middleware.
@@ -12,11 +12,11 @@ import { Response } from "./response";
  *  - Supporting extra properties injected dynamically (e.g., auth user, context)
  */
 export type Request<
-  TBody extends object = Record<string, unknown>,
-  TExtra extends object = Record<string, unknown>,
+	TBody extends object = Record<string, unknown>,
+	TExtra extends object = Record<string, unknown>,
 > = Omit<CoreRequest, "body"> & {
-  /** The parsed request body; optional for GET/DELETE requests */
-  body?: TBody;
+	/** The parsed request body; optional for GET/DELETE requests */
+	body?: TBody;
 } & TExtra;
 
 /**
@@ -33,8 +33,8 @@ export type Request<
  *  - A Promise resolving to any value (usually a CoreResponse via `res` helpers)
  */
 export type Controller<
-  TBody extends object = Record<string, unknown>,
-  TExtra extends object = Record<string, unknown>,
+	TBody extends object = Record<string, unknown>,
+	TExtra extends object = Record<string, unknown>,
 > = (req: Request<TBody, TExtra>, res: Response) => Promise<Result>;
 
 /**
@@ -53,10 +53,10 @@ export type Controller<
  *  - `Promise<CoreResponse | void>` if it ends the chain or `await next()` if it continues
  */
 export type Middleware<
-  TBody extends object = Record<string, unknown>,
-  TExtra extends object = Record<string, unknown>,
+	TBody extends object = Record<string, unknown>,
+	TExtra extends object = Record<string, unknown>,
 > = (
-  req: Request<TBody, TExtra>,
-  res: Response,
-  next: () => Promise<Result | void>,
+	req: Request<TBody, TExtra>,
+	res: Response,
+	next: () => Promise<Result | void>,
 ) => Promise<Result | void>;

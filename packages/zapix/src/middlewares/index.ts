@@ -1,1 +1,1 @@
-export * from "./traceMiddleware";
+export * from "./traceMiddleware.js";
