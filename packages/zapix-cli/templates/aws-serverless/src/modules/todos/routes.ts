@@ -1,12 +1,6 @@
 import { authorizationMiddleware } from "@/core/middlewares";
 import { Router } from "zapix";
-import {
-  createTodo,
-  deleteTodo,
-  getTodoById,
-  getTodos,
-  updateTodo,
-} from "./todos.controller";
+import { createTodo, deleteTodo, getTodoById, getTodos, updateTodo } from "./todos.controller";
 
 const router = new Router();
 

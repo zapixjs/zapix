@@ -1,5 +1,5 @@
 import type { CoreRequest, Result } from "./core.js";
-import { Response } from "./response.js";
+import type { Response } from "./response.js";
 
 /**
  * `Request` is the typed request object passed to Zapix handlers and middleware.
@@ -58,5 +58,5 @@ export type Middleware<
 > = (
 	req: Request<TBody, TExtra>,
 	res: Response,
-	next: () => Promise<Result | void>,
-) => Promise<Result | void>;
+	next: () => Promise<Result | undefined>,
+) => Promise<Result | undefined>;

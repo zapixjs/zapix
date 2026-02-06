@@ -15,8 +15,8 @@
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsc --watch",
-		"lint": "biome check src",
-		"format": "biome format src"
+		"lint": "biome check .",
+		"lint:fix": "biome check . --write"
 	},
 	"keywords": [
 		"zapix",

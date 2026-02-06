@@ -1,15 +1,15 @@
 export interface Todo {
-  id: string;
-  title: string;
-  completed: boolean;
-  createdAt: string;
+	id: string;
+	title: string;
+	completed: boolean;
+	createdAt: string;
 }
 
 export interface CreateTodoInput {
-  title: string;
+	title: string;
 }
 
 export interface UpdateTodoInput {
-  title?: string;
-  completed?: boolean;
+	title?: string;
+	completed?: boolean;
 }

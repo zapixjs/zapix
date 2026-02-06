@@ -1,4 +1,4 @@
-import { Result } from "./types/index.js";
+import type { Result } from "./types/index.js";
 
 export class ZapixResponseCore {
 	private statusCode = 200;
@@ -25,7 +25,7 @@ export class ZapixResponseCore {
 	set(headers: Record<string, string>): this;
 	set(keyOrHeaders: string | Record<string, string>, value?: string): this {
 		if (typeof keyOrHeaders === "string") {
-			this.headers[keyOrHeaders] = value!;
+			this.headers[keyOrHeaders] = value || "";
 		} else {
 			Object.assign(this.headers, keyOrHeaders);
 		}

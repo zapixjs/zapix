@@ -1,5 +1,5 @@
-import { Middleware } from "../types/index.js";
 import { v4 as uuidv4 } from "uuid";
+import type { Middleware } from "../types/index.js";
 
 /**
  * Configuration for the trace middleware
@@ -32,9 +32,7 @@ const DEFAULT_CONFIG: Required<TraceMiddlewareConfig> = {
  *
  * @param config - Optional configuration overrides
  */
-export function traceMiddleware(
-	config: TraceMiddlewareConfig = {},
-): Middleware {
+export function traceMiddleware(config: TraceMiddlewareConfig = {}): Middleware {
 	const finalConfig: Required<TraceMiddlewareConfig> = {
 		...DEFAULT_CONFIG,
 		...config,
@@ -55,8 +53,7 @@ export function traceMiddleware(
 		// Optionally attach requestId to the response body
 		if (finalConfig.includeInBody) {
 			const originalFinalize = res["finalize"].bind(res);
-			res["finalize"] = (body: unknown) =>
-				originalFinalize({ ...(body ?? {}), requestId });
+			res["finalize"] = (body: unknown) => originalFinalize({ ...(body ?? {}), requestId });
 		}
 
 		return next();

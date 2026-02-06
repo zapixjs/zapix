@@ -1,13 +1,6 @@
-import { Response } from "./response.js";
+import type { Response } from "./response.js";
 
-export type HttpMethod =
-	| "GET"
-	| "POST"
-	| "PUT"
-	| "PATCH"
-	| "DELETE"
-	| "OPTIONS"
-	| "HEAD";
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS" | "HEAD";
 
 export interface CoreRequest<TBody = unknown> {
 	/** HTTP method (GET, POST, etc.) */
@@ -70,7 +63,7 @@ export interface Result {
  */
 export type CoreController = (req: CoreRequest, res: Response) => Promise<any>;
 
-export type NextFn = (err?: unknown) => Promise<Result | void>;
+export type NextFn = (err?: unknown) => Promise<Result | undefined>;
 
 /**
  * CoreMiddleware represents a middleware function in Zapix.
@@ -80,8 +73,4 @@ export type NextFn = (err?: unknown) => Promise<Result | void>;
  * @param next - Call to continue to the next middleware or handler
  * @returns Promise resolving to CoreResponse if short-circuited, or void to continue
  */
-export type CoreMiddleware = (
-	req: CoreRequest,
-	res: Response,
-	next: NextFn,
-) => Promise<Result | void>;
+export type CoreMiddleware = (req: CoreRequest, res: Response, next: NextFn) => Promise<Result | undefined>;

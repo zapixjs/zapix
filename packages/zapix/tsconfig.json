@@ -1,23 +1,9 @@
 {
+	"extends": "@repo/typescript-config/base.json",
 	"compilerOptions": {
-		"lib": ["ES2024", "DOM"],
-		"target": "ES2024",
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
 		"outDir": "dist",
 		"rootDir": "src",
 		"declarationDir": "./dist/types",
-		"strict": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"skipLibCheck": true,
-		"checkJs": true,
-		"allowJs": true,
-		"declaration": true,
-		"declarationMap": true,
-		"allowSyntheticDefaultImports": true
 	},
 	"files": ["./src/index.ts"],
-	"include": ["src"],
-	"exclude": ["dist", "node_modules"]
 }

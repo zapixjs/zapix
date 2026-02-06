@@ -1,10 +1,4 @@
-import {
-	Controller,
-	Middleware,
-	Request,
-	Response,
-	Result,
-} from "./types/index.js";
+import type { Controller, Middleware, Request, Response, Result } from "./types/index.js";
 
 type RouteChainItem = Controller | Middleware;
 interface Route {
@@ -13,11 +7,7 @@ interface Route {
 	handlers: RouteChainItem[];
 }
 
-type ErrorHandler = (
-	err: unknown,
-	req: Request,
-	res: Response,
-) => Promise<Result> | Result;
+type ErrorHandler = (err: unknown, req: Request, res: Response) => Promise<Result | undefined>;
 
 export class Router {
 	private routes: Route[] = [];
@@ -57,11 +47,7 @@ export class Router {
 		this.errorHandler = handler;
 	}
 
-	private async handleError(
-		err: unknown,
-		req: Request,
-		res: Response,
-	): Promise<Result> {
+	private async handleError(err: unknown, req: Request, res: Response): Promise<Result | undefined> {
 		if (this.errorHandler) {
 			return await this.errorHandler(err, req, res);
 		}
@@ -78,15 +64,10 @@ export class Router {
 		this.routes.push({ method, path, handlers });
 	}
 
-	protected async handle(req: Request, res: Response): Promise<Result> {
-		const route = this.routes.find(
-			(r) => r.method === req.method && r.path === req.path,
-		);
+	async handle(req: Request, res: Response): Promise<Result> {
+		const route = this.routes.find((r) => r.method === req.method && r.path === req.path);
 
-		const handlers = [
-			...this.globalMiddlewares,
-			...(route ? route.handlers : this.fallbackHandlers),
-		];
+		const handlers = [...this.globalMiddlewares, ...(route ? route.handlers : this.fallbackHandlers)];
 
 		if (!handlers.length) {
 			return res.status(404).json({ message: "Route not found" });
@@ -94,7 +75,7 @@ export class Router {
 
 		let index = 0;
 
-		const run = async (err?: unknown): Promise<Result | void> => {
+		const run = async (err?: unknown): Promise<Result | undefined> => {
 			if (err) {
 				return this.handleError(err, req, res);
 			}
@@ -103,18 +84,12 @@ export class Router {
 			if (!handler) return;
 
 			try {
-				return await handler(
-					req,
-					res,
-					(nextErr?: unknown): Promise<void | Result> => run(nextErr),
-				);
+				return await handler(req, res, (nextErr?: unknown): Promise<undefined | Result> => run(nextErr));
 			} catch (error) {
 				return this.handleError(error, req, res);
 			}
 		};
 
-		return (
-			(await run()) ?? res.status(500).json({ message: "No response returned" })
-		);
+		return (await run()) ?? res.status(500).json({ message: "No response returned" });
 	}
 }

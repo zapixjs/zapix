@@ -7,11 +7,11 @@
  * @returns Parsed object of type T, or undefined if invalid
  */
 export function tryParseJson<T = unknown>(jsonString?: string): T | undefined {
-  if (!jsonString) return undefined;
+	if (!jsonString) return undefined;
 
-  try {
-    return JSON.parse(jsonString) as T;
-  } catch {
-    return undefined;
-  }
+	try {
+		return JSON.parse(jsonString) as T;
+	} catch {
+		return undefined;
+	}
 }

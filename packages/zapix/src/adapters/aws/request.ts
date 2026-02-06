@@ -1,20 +1,13 @@
-import type {
-	APIGatewayProxyEventV2,
-	APIGatewayProxyResultV2,
-	Context,
-} from "aws-lambda";
+import type { APIGatewayProxyEventV2, APIGatewayProxyResultV2, Context } from "aws-lambda";
 import { ZapixResponseCore } from "../../core/response.js";
-import { Router } from "../../core/router.js";
-import { Request } from "../../core/types/index.js";
+import type { Router } from "../../core/router.js";
+import type { Request } from "../../core/types/index.js";
 import { tryParseJson } from "../../helpers/index.js";
 
 const response = new ZapixResponseCore();
 
 export function awsLambdaAdapter(router: Router) {
-	return async (
-		event: APIGatewayProxyEventV2,
-		context: Context,
-	): Promise<APIGatewayProxyResultV2> => {
+	return async (event: APIGatewayProxyEventV2, context: Context): Promise<APIGatewayProxyResultV2> => {
 		const request: Request = {
 			method: event.requestContext.http.method,
 			path: event.requestContext.http.path,

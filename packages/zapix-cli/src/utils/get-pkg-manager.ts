@@ -1,23 +1,23 @@
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
 
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 
 export function getPkgManager(): PackageManager {
-  const userAgent = process.env.npm_config_user_agent || "";
+	const userAgent = process.env.npm_config_user_agent || "";
 
-  if (userAgent.startsWith("yarn")) {
-    return "yarn";
-  }
+	if (userAgent.startsWith("yarn")) {
+		return "yarn";
+	}
 
-  if (userAgent.startsWith("pnpm")) {
-    return "pnpm";
-  }
+	if (userAgent.startsWith("pnpm")) {
+		return "pnpm";
+	}
 
-  if (userAgent.startsWith("bun")) {
-    return "bun";
-  }
+	if (userAgent.startsWith("bun")) {
+		return "bun";
+	}
 
-  return "npm";
+	return "npm";
 }
 
 /**
@@ -28,26 +28,26 @@ export function getPkgManager(): PackageManager {
  * then falls back to spawning `pnpm --version --silent`.
  */
 export function getPnpmMajorVersion(): number | null {
-  // Try to get version from user agent first (e.g., "pnpm/9.13.2 npm/? node/v20.x linux x64")
-  const userAgent = process.env.npm_config_user_agent || "";
-  const pnpmVersionMatch = userAgent.match(/pnpm\/(\d+)/);
-  if (pnpmVersionMatch) {
-    return parseInt(String(pnpmVersionMatch[1]), 10);
-  }
+	// Try to get version from user agent first (e.g., "pnpm/9.13.2 npm/? node/v20.x linux x64")
+	const userAgent = process.env.npm_config_user_agent || "";
+	const pnpmVersionMatch = userAgent.match(/pnpm\/(\d+)/);
+	if (pnpmVersionMatch) {
+		return parseInt(String(pnpmVersionMatch[1]), 10);
+	}
 
-  // Fall back to spawning pnpm --version
-  try {
-    const version = execSync("pnpm --version --silent", {
-      encoding: "utf8",
-      stdio: ["pipe", "pipe", "ignore"],
-    }).trim();
-    const majorVersion = parseInt(String(version.split(".")[0]), 10);
-    if (!Number.isNaN(majorVersion)) {
-      return majorVersion;
-    }
-  } catch {
-    // pnpm not available or failed to run
-  }
+	// Fall back to spawning pnpm --version
+	try {
+		const version = execSync("pnpm --version --silent", {
+			encoding: "utf8",
+			stdio: ["pipe", "pipe", "ignore"],
+		}).trim();
+		const majorVersion = parseInt(String(version.split(".")[0]), 10);
+		if (!Number.isNaN(majorVersion)) {
+			return majorVersion;
+		}
+	} catch {
+		// pnpm not available or failed to run
+	}
 
-  return null;
+	return null;
 }
