@@ -1,6 +1,6 @@
+import retry from "async-retry";
 import { copyFileSync, existsSync, mkdirSync } from "node:fs";
 import path, { resolve } from "node:path";
-import retry from "async-retry";
 import picocolors from "picocolors";
 import prompts from "prompts";
 import { getTemplateFile, installTemplate, type TemplateType } from "../templates/index.js";
