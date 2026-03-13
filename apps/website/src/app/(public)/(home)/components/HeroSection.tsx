@@ -10,10 +10,14 @@ import {
 } from '@/app/(public)/components/CodeBlock';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Github, Zap } from 'lucide-react';
+import { ArrowRight, Github, Star, Zap } from 'lucide-react';
 import Link from 'next/link';
 
-const HeroSection = () => {
+type HeroSectionProps = {
+	stars?: number;
+};
+
+const HeroSection = ({ stars }: HeroSectionProps) => {
 	return (
 		<section className="relative overflow-hidden pb-20 pt-16 md:pb-32 md:pt-24">
 			{/* Dot grid pattern */}
@@ -85,8 +89,30 @@ const HeroSection = () => {
 							>
 								<Github className="size-4" />
 								Star on GitHub
+								{stars != null && stars > 0 && (
+									<span className="ml-0.5 flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary">
+										<Star className="size-2.5" />
+										{stars.toLocaleString()}
+									</span>
+								)}
 							</Link>
 						</Button>
+					</div>
+
+					{/* Social trust bar */}
+					<div className="animate-fade-up-delay-4 mt-5 flex flex-wrap items-center justify-center gap-4">
+						<span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
+							<span className="size-1.5 rounded-full bg-emerald-500/70" />
+							MIT Licensed
+						</span>
+						<span className="text-border/50">·</span>
+						<span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
+							Zero dependencies
+						</span>
+						<span className="text-border/50">·</span>
+						<span className="flex items-center gap-1.5 text-xs text-muted-foreground/50">
+							TypeScript first
+						</span>
 					</div>
 
 					{/* Hero code — glowing border wrapper */}

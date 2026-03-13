@@ -1,17 +1,26 @@
-import { Box, Code2, Feather, Timer } from 'lucide-react';
+import { Box, Code2, Download, Feather, Star, Timer } from 'lucide-react';
+import { fetchProjectStats, formatCount } from '@/lib/project-stats';
 
-const stats = [
-	{ value: '< 5KB', label: 'Bundle size', icon: Feather },
-	{ value: '0', label: 'Config needed', icon: Box },
-	{ value: '100%', label: 'TypeScript', icon: Code2 },
-	{ value: '< 3ms', label: 'Routing overhead', icon: Timer },
-];
+const StatsSection = async () => {
+	const { stars, npmDownloads } = await fetchProjectStats();
 
-const StatsSection = () => {
+	const stats = [
+		{ value: '< 5KB', label: 'Bundle size', icon: Feather },
+		{ value: '0', label: 'Config needed', icon: Box },
+		{ value: '100%', label: 'TypeScript', icon: Code2 },
+		{ value: '< 3ms', label: 'Routing overhead', icon: Timer },
+		{ value: formatCount(stars) || '—', label: 'GitHub stars', icon: Star },
+		{
+			value: npmDownloads > 0 ? `${formatCount(npmDownloads)}/wk` : '—',
+			label: 'npm downloads',
+			icon: Download,
+		},
+	];
+
 	return (
 		<section className="relative border-y border-border/30 bg-muted/20 py-12">
 			<div className="mx-auto max-w-7xl px-6">
-				<div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+				<div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-6">
 					{stats.map((stat) => (
 						<div
 							key={stat.label}

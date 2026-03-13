@@ -1,6 +1,28 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+const links = [
+	{
+		label: 'GitHub',
+		href: 'https://github.com/zapixjs/zapix',
+		external: true,
+	},
+	{
+		label: 'npm',
+		href: 'https://www.npmjs.com/package/zapix',
+		external: true,
+	},
+	{ label: 'Blog', href: '/blog', external: false },
+	{ label: 'Changelog', href: '/changelog', external: false },
+	{ label: 'About', href: '/about', external: false },
+	{ label: 'Privacy', href: '/privacy', external: false },
+	{
+		label: 'License',
+		href: 'https://github.com/zapixjs/zapix/blob/main/LICENSE',
+		external: true,
+	},
+];
+
 const FooterSection = () => {
 	return (
 		<footer className="border-t border-border/30 py-5">
@@ -23,26 +45,17 @@ const FooterSection = () => {
 						</span>
 					</div>
 
-					<div className="flex items-center gap-5">
-						{[
-							{
-								label: 'GitHub',
-								href: 'https://github.com/zapixjs/zapix',
-							},
-							{
-								label: 'npm',
-								href: 'https://www.npmjs.com/package/zapix',
-							},
-							{
-								label: 'License',
-								href: 'https://github.com/zapixjs/zapix/blob/main/LICENSE',
-							},
-						].map((link) => (
+					<div className="flex flex-wrap items-center gap-5">
+						{links.map((link) => (
 							<Link
 								key={link.label}
 								href={link.href}
-								target="_blank"
-								rel="noopener noreferrer"
+								{...(link.external
+									? {
+											target: '_blank',
+											rel: 'noopener noreferrer',
+										}
+									: {})}
 								className="text-xs text-muted-foreground/50 transition-colors hover:text-foreground"
 							>
 								{link.label}
