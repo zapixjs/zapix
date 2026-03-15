@@ -1,7 +1,6 @@
 {
 	"name": "zapix",
 	"private": true,
-	"packageManager": "pnpm@10.28.1",
 	"scripts": {
 		"build": "turbo run build",
 		"lint": "turbo run lint",
