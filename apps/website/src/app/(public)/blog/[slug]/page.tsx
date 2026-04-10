@@ -1,9 +1,10 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft, Clock, Tag, User } from 'lucide-react';
-import { getAllPosts, getPostBySlug, formatDate } from '@/lib/blog';
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 import type { PostBlock } from '@/lib/blog';
+import { formatDate, getAllPosts, getPostBySlug } from '@/lib/blog';
+import { ArrowLeft, Clock, Tag, User } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://zapix.dev';
 
@@ -90,6 +91,7 @@ function renderBlock(block: PostBlock, i: number) {
 						>
 							<span className="mt-2.5 size-1.5 shrink-0 rounded-full bg-primary/60" />
 							<span
+								// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 								dangerouslySetInnerHTML={{
 									__html: item.replace(
 										/\*\*(.+?)\*\*/g,
@@ -169,6 +171,7 @@ export default async function PostPage({ params }: Props) {
 		<>
 			<script
 				type="application/ld+json"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 			/>
 
