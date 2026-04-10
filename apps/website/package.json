@@ -4,9 +4,9 @@
 	"type": "module",
 	"private": true,
 	"engines": {
-		"node": "20.x"
+		"node": "24.x"
 	},
-	"packageManager": "pnpm@9",
+	"packageManager": "pnpm@10",
 	"scripts": {
 		"dev": "next dev --turbopack --port 3000",
 		"build": "next build",
