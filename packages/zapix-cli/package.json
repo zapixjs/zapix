@@ -49,6 +49,6 @@
 		"@types/node": "^24.10.9",
 		"@types/prompts": "^2.4.9",
 		"@types/validate-npm-package-name": "^4.0.2",
-		"typescript": "^5.9.3"
+		"typescript": "^6.0.2"
 	}
 }

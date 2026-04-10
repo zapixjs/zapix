@@ -144,7 +144,7 @@ export const installTemplate = async (args: InstallTemplateArgs) => {
 			zapix: "0.2.0",
 		},
 		devDependencies: {
-			typescript: "^5",
+			typescript: "^6.0.2",
 			"@types/node": "^20",
 		},
 	};
