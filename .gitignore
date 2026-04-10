@@ -14,6 +14,9 @@ pnpm-lock.yaml
 dist/
 build/
 lib/
+# Source under website (not build output); broad `lib/` above would untrack this.
+!apps/website/src/lib/
+!apps/website/src/lib/**
 out/
 coverage/
 .next/
