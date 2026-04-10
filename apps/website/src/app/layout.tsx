@@ -1,8 +1,8 @@
-import type { Metadata } from 'next';
-import localFont from 'next/font/local';
+import { ThemeProvider } from '@/components/theme-provider';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { ThemeProvider } from '@/components/theme-provider';
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import './globals.css';
 
 const geistSans = localFont({
@@ -69,7 +69,7 @@ export default function RootLayout({
 		<html lang="en" suppressHydrationWarning>
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<ThemeProvider>{children}</ThemeProvider>
-				<Analytics />
+				<Analytics mode="production" />
 				<SpeedInsights />
 			</body>
 		</html>
