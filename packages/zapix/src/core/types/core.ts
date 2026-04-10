@@ -59,9 +59,9 @@ export interface Result {
  *
  * @param req - The core request object
  * @param res - Response helpers (res.json, res.text, res.empty)
- * @returns Promise resolving to any value (usually a CoreResponse via res)
+ * @returns Promise resolving to the route result (usually a CoreResponse via res)
  */
-export type CoreController = (req: CoreRequest, res: Response) => Promise<any>;
+export type CoreController = (req: CoreRequest, res: Response) => Promise<Result>;
 
 export type NextFn = (err?: unknown) => Promise<Result | undefined>;
 

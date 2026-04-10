@@ -1,4 +1,4 @@
-import type { APIGatewayProxyEventV2, Context } from "aws-lambda";
+import type { APIGatewayProxyEventV2, APIGatewayProxyResultV2, Context } from "aws-lambda";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { traceMiddleware } from "../src";
 import { awsLambdaAdapter } from "../src/adapters/aws";
@@ -60,7 +60,7 @@ const createMockAPIGatewayEvent = (params: ICreateMockAPIGatewayEvent) => {
 				sourceIp: "127.0.0.1",
 				userAgent: "Vitest-Test",
 			},
-		} as any,
+		} as APIGatewayProxyEventV2["requestContext"],
 		body: body !== undefined ? JSON.stringify(body) : undefined,
 		isBase64Encoded: false,
 		stageVariables,
@@ -69,18 +69,17 @@ const createMockAPIGatewayEvent = (params: ICreateMockAPIGatewayEvent) => {
 	return event;
 };
 
-const mockHandler = vi.fn(async (req: any, res: Response) => {
+const mockHandler = vi.fn(async (_req: Request, res: Response) => {
 	return res.status(200).json({ ok: true });
 });
 
-const mockErrorHandler = vi.fn(
-	async (err: unknown, req: Request, res: Response) =>
-		res.status(500).json({ error: "Custom Error" }),
+const mockErrorHandler = vi.fn(async (_err: unknown, _req: Request, res: Response) =>
+	res.status(500).json({ error: "Custom Error" }),
 );
 
 describe("Router", () => {
 	let router: Router;
-	const context: Context = {} as any;
+	const context = {} as unknown as Context;
 
 	beforeEach(() => {
 		router = new Router();
@@ -96,7 +95,7 @@ describe("Router", () => {
 			path: "/users",
 		});
 
-		const result: any = await lambdaHandler(event, context);
+		const result: APIGatewayProxyResultV2 = await lambdaHandler(event, context);
 
 		expect(result.statusCode).toBe(200);
 		expect(JSON.parse(result.body)).toEqual({ ok: true });
@@ -113,7 +112,7 @@ describe("Router", () => {
 			body: { name: "John" },
 		});
 
-		const result: any = await lambdaHandler(event, context);
+		const result: APIGatewayProxyResultV2 = await lambdaHandler(event, context);
 
 		expect(result.statusCode).toBe(200);
 		expect(JSON.parse(result.body)).toEqual({ ok: true });
@@ -121,7 +120,7 @@ describe("Router", () => {
 	});
 
 	it("should handle global middleware", async () => {
-		const middleware = vi.fn(async (req, res, next) => next());
+		const middleware = vi.fn(async (_req, _res, next) => next());
 		const traceMiddlewareFn = vi.fn(traceMiddleware());
 
 		router.use(middleware);
@@ -135,7 +134,7 @@ describe("Router", () => {
 			path: "/users",
 		});
 
-		const result: any = await lambdaHandler(event, context);
+		const result: APIGatewayProxyResultV2 = await lambdaHandler(event, context);
 
 		expect(middleware).toHaveBeenCalled();
 		expect(traceMiddlewareFn).toHaveBeenCalled();
@@ -146,7 +145,7 @@ describe("Router", () => {
 	});
 
 	it("should fallback to 'all' handler if route not found", async () => {
-		const fallback = vi.fn(async (req, res) => res.json({ fallback: true }));
+		const fallback = vi.fn(async (_req, res) => res.json({ fallback: true }));
 		router.all(fallback);
 		const lambdaHandler = awsLambdaAdapter(router);
 
@@ -155,7 +154,7 @@ describe("Router", () => {
 			path: "/unknown",
 		});
 
-		const result: any = await lambdaHandler(event, context);
+		const result: APIGatewayProxyResultV2 = await lambdaHandler(event, context);
 
 		expect(fallback).toHaveBeenCalled();
 		expect(JSON.parse(result.body)).toEqual({ fallback: true });
@@ -169,7 +168,7 @@ describe("Router", () => {
 			path: "/notfound",
 		});
 
-		const result: any = await lambdaHandler(event, context);
+		const result: APIGatewayProxyResultV2 = await lambdaHandler(event, context);
 
 		expect(result.statusCode).toBe(404);
 		expect(JSON.parse(result.body)).toEqual({ message: "Route not found" });
@@ -187,7 +186,7 @@ describe("Router", () => {
 			path: "/error",
 		});
 
-		const result: any = await lambdaHandler(event, context);
+		const result: APIGatewayProxyResultV2 = await lambdaHandler(event, context);
 
 		expect(result.statusCode).toBe(500);
 		expect(JSON.parse(result.body)).toEqual({
@@ -209,7 +208,7 @@ describe("Router", () => {
 			path: "/error",
 		});
 
-		const result: any = await lambdaHandler(event, context);
+		const result: APIGatewayProxyResultV2 = await lambdaHandler(event, context);
 
 		expect(mockErrorHandler).toHaveBeenCalled();
 		expect(result.statusCode).toBe(500);
@@ -217,8 +216,7 @@ describe("Router", () => {
 	});
 
 	it("should propagate error from next(err) in middleware", async () => {
-		const middleware = async (req: Request, res: Response, next: NextFn) =>
-			next(new Error("Middleware Error"));
+		const middleware = async (_req: Request, _res: Response, next: NextFn) => next(new Error("Middleware Error"));
 		router.use(middleware);
 
 		router.get("/test", mockHandler);
@@ -230,7 +228,7 @@ describe("Router", () => {
 			path: "/test",
 		});
 
-		const result: any = await lambdaHandler(event, context);
+		const result: APIGatewayProxyResultV2 = await lambdaHandler(event, context);
 
 		expect(result.statusCode).toBe(500);
 		expect(JSON.parse(result.body)).toEqual({ error: "Middleware Error" });

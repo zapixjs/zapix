@@ -7,8 +7,8 @@
 		"build": "tsc",
 		"test": "vitest run",
 		"test:watch": "vitest",
-		"lint": "biome check .",
-		"lint:fix": "biome check . --write",
+		"lint": "biome check src __tests__ vitest.config.ts package.json tsconfig.json biome.json",
+		"lint:fix": "biome check src __tests__ vitest.config.ts package.json tsconfig.json biome.json --write",
 		"prepublishOnly": "npm run build"
 	},
 	"main": "./dist/index.js",
