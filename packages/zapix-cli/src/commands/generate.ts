@@ -1,4 +1,4 @@
-export async function generateHandler(type: string, name?: string, options?: any) {
+export async function generateHandler(type: string, name?: string, options?: { module?: string }) {
 	switch (type) {
 		case "module":
 		case "m":

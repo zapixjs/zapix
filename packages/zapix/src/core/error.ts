@@ -66,9 +66,12 @@ export class ZapixError extends Error {
 		this.code = code;
 		this.details = details;
 
-		// Maintain proper stack trace for V8 engines
-		if (Error.captureStackTrace) {
-			Error.captureStackTrace(this, ZapixError);
+		// Maintain proper stack trace for V8 engines (optional; not on lib ES ErrorConstructor)
+		const Err = Error as typeof Error & {
+			captureStackTrace?: (target: object, constructorOpt?: new (...args: never[]) => Error) => void;
+		};
+		if (typeof Err.captureStackTrace === "function") {
+			Err.captureStackTrace(this, ZapixError);
 		}
 	}
 }

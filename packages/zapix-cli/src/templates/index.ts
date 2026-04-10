@@ -117,8 +117,17 @@ export const installTemplate = async (args: InstallTemplateArgs) => {
 	/** Copy the version from package.json or override for tests. */
 	// const version = process.env.NEXT_PRIVATE_TEST_VERSION ?? pkg.version;
 
+	type PackageJsonDraft = {
+		name: string;
+		version: string;
+		private: boolean;
+		scripts: Record<string, string>;
+		dependencies: Record<string, string>;
+		devDependencies?: Record<string, string>;
+	};
+
 	/** Create a package.json for the new project and write it to disk. */
-	const packageJson: any = {
+	const packageJson: PackageJsonDraft = {
 		name: projectName,
 		version: "0.1.0",
 		private: true,
@@ -135,7 +144,7 @@ export const installTemplate = async (args: InstallTemplateArgs) => {
 			zapix: "0.2.0",
 		},
 		devDependencies: {
-			typescript: "^5",
+			typescript: "^6.0.2",
 			"@types/node": "^20",
 		},
 	};
@@ -152,11 +161,11 @@ export const installTemplate = async (args: InstallTemplateArgs) => {
 	if (useBiome) {
 		packageJson.devDependencies = {
 			...packageJson.devDependencies,
-			"@biomejs/biome": "2.3.10",
+			"@biomejs/biome": "2.4.11",
 		};
 	}
 
-	const devDeps = Object.keys(packageJson.devDependencies).length;
+	const devDeps = Object.keys(packageJson.devDependencies ?? {}).length;
 	if (!devDeps) delete packageJson.devDependencies;
 
 	// Sort dependencies and devDependencies alphabetically

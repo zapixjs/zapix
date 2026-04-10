@@ -3,14 +3,8 @@
 	"compilerOptions": {
 		"outDir": "dist",
 		"rootDir": "src",
-		"declarationDir": "./dist/types",
+		"declarationDir": "./dist/types"
 	},
 	"files": ["./src/index.ts"],
-	"exclude": [
-		"dist",
-		"node_modules",
-		"**/*.spec.ts",
-		"**/*.test.ts",
-		"templates"
-	]
+	"exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.test.ts", "templates"]
 }

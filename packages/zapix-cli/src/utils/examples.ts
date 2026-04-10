@@ -38,11 +38,17 @@ export async function getRepoInfo(url: URL, examplePath?: string) {
 				return;
 			}
 
-			const info = (await infoResponse.json()) as any;
+			const info = (await infoResponse.json()) as {
+				default_branch?: string;
+			};
+			const branch = info.default_branch;
+			if (branch === undefined) {
+				return;
+			}
 			return {
 				username: username as string,
 				name: name as string,
-				branch: info.default_branch,
+				branch,
 				filePath,
 			};
 		} catch {

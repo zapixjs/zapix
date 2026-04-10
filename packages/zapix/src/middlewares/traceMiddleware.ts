@@ -52,7 +52,9 @@ export function traceMiddleware(config: TraceMiddlewareConfig = {}): Middleware 
 
 		// Optionally attach requestId to the response body
 		if (finalConfig.includeInBody) {
+			// biome-ignore lint/complexity/useLiteralKeys: finalize is protected on ZapixResponseCore
 			const originalFinalize = res["finalize"].bind(res);
+			// biome-ignore lint/complexity/useLiteralKeys: finalize is protected on ZapixResponseCore
 			res["finalize"] = (body: unknown) => originalFinalize({ ...(body ?? {}), requestId });
 		}
 
