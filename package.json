@@ -2,9 +2,9 @@
 	"name": "zapix",
 	"private": true,
 	"engines": {
-		"node": "24.x"
+		"node": "20.x"
 	},
-	"packageManager": "pnpm@10",
+	"packageManager": "pnpm@9.15.9",
 	"scripts": {
 		"build": "turbo run build",
 		"lint": "turbo run lint",
