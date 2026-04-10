@@ -19,6 +19,9 @@ build/
 # ===============================
 *.tsbuildinfo
 *.d.ts
+# Hand-written ambient types (e.g. `declare module '*.css'`) must be committed;
+# broad `*.d.ts` above would omit them and break CI `tsc` while local builds still work.
+!apps/website/**/*.d.ts
 
 # ===============================
 # Logs
